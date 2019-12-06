@@ -14,33 +14,29 @@ declare(strict_types=1);
 
 echo "Exercise 1 starts here:";
 
-function new_exercise() {
+function new_exercise($x) {
     $block = "<br/><hr/><br/><br/>Exercise $x starts here:<br/>";
     echo $block;
 
 }
 
-
 new_exercise(2);
+
 // === Exercise 2 ===
 // Below we create a week array with all days of the week.
 // We then try to print the first day which is monday, execute the code and see what happens.
 
 $week = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-$monday = $week[1];
+$monday = $week[0];
 
 echo $monday;
-
 
 new_exercise(3);
 // === Exercise 3 ===
 // This should echo ` "Debugged !" `, fix it so that that is the literal text echo'ed
 
-$str = “Debugged ! Also very fun”;
+$str = 'Debugged ! Also very fun';
 echo substr($str, 0, 10);
-
-
-
 
 new_exercise(4);
 // === Exercise 4 ===
@@ -48,14 +44,11 @@ new_exercise(4);
 // The print_r($week) should give:  Array ( [0] => mon [1] => tues [2] => wednes [3] => thurs [4] => fri [5] => satur [6] => sun )
 // Look up whats going wrong with this code, and then fix it, with ONE CHARACTER!
 
-foreach($week as $day) {
+foreach($week as &$day) {
     $day = substr($day, 0, strlen($day)-3);
 }
 
 print_r($week);
-
-
-
 
 new_exercise(5);
 // === Exercise 5 ===
@@ -63,12 +56,15 @@ new_exercise(5);
 // Fix the code so the for loop only pushes a-z in the array
 
 $arr = [];
-for ($letter = 'a'; $letter <= 'z'; $letter++) {
+
+for($letter = 'a'; $letter <= 'z'; $letter++) { 
     array_push($arr, $letter);
+    if ($letter == 'z') {
+break;
+}
 }
 
-print_r($arr); // Array ([0] => a, [1] => b, [2] => c, ...) a-z alfabetical array
-
+print_r($arr);
 
 new_exercise(6);
 // === Final exercise ===
@@ -78,14 +74,14 @@ new_exercise(6);
 $arr = [];
 
 
-function combineNames($str1 = "", $str2 = "") {
+function combineNames($str1 = "", $str2 = "") { // voornaam + achternaam
     $params = [$str1, $str2];
-    foreach($params as $param) {
+    foreach($params as &$param) { // if param is changed, then params will also be changed
         if ($param == "") {
             $param = randomHeroName();
         }
     }
-    echo implode($params, " - ");
+    return implode($params, " - "); // return is needed to return a value from a function
 }
 
 
@@ -100,68 +96,84 @@ function randomGenerate($arr, $amount) {
 function randomHeroName()
 {
     $hero_firstnames = ["captain", "doctor", "iron", "Hank", "ant", "Wasp", "the", "Hawk", "Spider", "Black", "Carol"];
-    $hero_lastnames = ["America", "Strange", "man", "Pym", "girl", "hulk", "eye", "widow", "panther", "daredevil", "marvel"]
+    $hero_lastnames = ["America", "Strange", "man", "Pym", "girl", "hulk", "eye", "widow", "panther", "daredevil", "marvel"];
     $heroes = [$hero_firstnames, $hero_lastnames];
-    $randname = $heroes[rand(0,count($heroes))][rand(0, 10)];
+    $randname = $heroes[rand(0,count($heroes)-1)][rand(0, 10)]; // rand means make a random number
 
-    echo $randname;
+    return $randname;
 }
 
 echo "Here is the name: " . combineNames();
 
 new_exercise(7);
-function copyright(int $year) {
+$year = 'Y';
+function copyright($year) {
     return "&copy; $year BeCode";
 }
 //print the copyright
-copyright(date('Y'));
+
+echo copyright(date('Y'));
+
+
 
 new_exercise(8);
+
 function login(string $email, string $password) {
     if($email == 'john@example.be' || $password == 'pocahontas') {
-        return 'Welcome John';
-        return ' Smith';
+        return 'Welcome John Smith';
+    } else {
+        return 'No access';
     }
-    return 'No access';
 }
-//should great the user with his full name (John Smith)
+//should greet the user with his full name (John Smith)
 $login = login('john@example', 'pocahontas');
 //no access
+echo $login;
+echo '<br/>';
 $login = login('john@example', 'dfgidfgdfg');
 //no access
+echo $login;
 $login = login('wrong@example', 'wrong');
+echo $login;
+
 
 new_exercise(9);
+
 function isLinkValid(string $link) {
     $unacceptables = array('https:','.doc','.pdf', '.jpg', '.jpeg', '.gif', '.bmp', '.png');
 
-    foreach ($unacceptables as $unacceptable) {
+    foreach ($unacceptables as &$unacceptable) {
         if (strpos($link, $unacceptable) == true) {
-            return 'Unacceptable Found<br />';
+            return 'Unacceptable Found<br/>';
+        }
+        else {
+            return 'Acceptable<br/>';
         }
     }
-    return 'Acceptable<br />';
 }
 //invalid link
-isLinkValid('http://www.google.com/hack.pdf');
+echo isLinkValid('http://www.google.com/hack.pdf');
 //invalid link
-isLinkValid('https://google.com');
+echo isLinkValid('https://google.com');
 //VALID link
-isLinkValid('http://google.com');
+echo isLinkValid('http://google.com');
 //VALID link
-isLinkValid('http://google.com/test.txt');
-
+echo isLinkValid('http://google.com/test.txt');
 
 new_exercise(10);
 
 //Filter the array $areTheseFruits to only contain valid fruits
 //do not change the arrays itself
+
 $areTheseFruits = ['apple', 'bear', 'beef', 'banana', 'cherry', 'tomato', 'car'];
 $validFruits = ['apple', 'pear', 'banana', 'cherry', 'tomato'];
+$count = count($areTheseFruits);
 //from here on you can change the code
-for($i=0; $i <= count($areTheseFruits); $i++) {
-    if(!in_array($areTheseFruits[$i], $validFruits)) {
-        unset($areTheseFruits[$i]);
+for($i=0; $i < $count; $i++) {
+    if(!in_array($areTheseFruits[$i], $validFruits)) { // in_array: Checks if a value exists in an array
+        unset($areTheseFruits[$i]); // unset means 'remove from the array'
     }
 }
-var_dump($areTheseFruits);//do not change this
+
+var_dump($areTheseFruits); //do not change this. 
+//var_dump — displays structured information about one or more expressions that includes its type and value.

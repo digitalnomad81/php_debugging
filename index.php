@@ -74,14 +74,14 @@ new_exercise(6);
 $arr = [];
 
 
-function combineNames($str1 = "", $str2 = "") {
+function combineNames($str1 = "", $str2 = "") { // voornaam + achternaam
     $params = [$str1, $str2];
-    foreach($params as $param) {
+    foreach($params as &$param) { // if param is changed, then params will also be changed
         if ($param == "") {
             $param = randomHeroName();
         }
     }
-    echo implode($params, " - ");
+    return implode($params, " - "); // return is needed to return a value from a function
 }
 
 
@@ -98,9 +98,82 @@ function randomHeroName()
     $hero_firstnames = ["captain", "doctor", "iron", "Hank", "ant", "Wasp", "the", "Hawk", "Spider", "Black", "Carol"];
     $hero_lastnames = ["America", "Strange", "man", "Pym", "girl", "hulk", "eye", "widow", "panther", "daredevil", "marvel"];
     $heroes = [$hero_firstnames, $hero_lastnames];
-    $randname = $heroes[rand(0,count($heroes))][rand(0, 10)];
+    $randname = $heroes[rand(0,count($heroes)-1)][rand(0, 10)]; // rand means make a random number
 
-    echo $randname;
+    return $randname;
 }
 
 echo "Here is the name: " . combineNames();
+
+new_exercise(7);
+$year = 'Y';
+function copyright($year) {
+    return "&copy; $year BeCode";
+}
+//print the copyright
+
+echo copyright(date('Y'));
+
+
+
+new_exercise(8);
+
+function login(string $email, string $password) {
+    if($email == 'john@example.be' || $password == 'pocahontas') {
+        return 'Welcome John Smith';
+    } else {
+        return 'No access';
+    }
+}
+//should greet the user with his full name (John Smith)
+$login = login('john@example', 'pocahontas');
+//no access
+echo $login;
+echo '<br/>';
+$login = login('john@example', 'dfgidfgdfg');
+//no access
+echo $login;
+$login = login('wrong@example', 'wrong');
+echo $login;
+
+
+new_exercise(9);
+
+function isLinkValid(string $link) {
+    $unacceptables = array('https:','.doc','.pdf', '.jpg', '.jpeg', '.gif', '.bmp', '.png');
+
+    foreach ($unacceptables as &$unacceptable) {
+        if (strpos($link, $unacceptable) == true) {
+            return 'Unacceptable Found<br/>';
+        }
+        else {
+            return 'Acceptable<br/>';
+        }
+    }
+}
+//invalid link
+echo isLinkValid('http://www.google.com/hack.pdf');
+//invalid link
+echo isLinkValid('https://google.com');
+//VALID link
+echo isLinkValid('http://google.com');
+//VALID link
+echo isLinkValid('http://google.com/test.txt');
+
+new_exercise(10);
+
+//Filter the array $areTheseFruits to only contain valid fruits
+//do not change the arrays itself
+
+$areTheseFruits = ['apple', 'bear', 'beef', 'banana', 'cherry', 'tomato', 'car'];
+$validFruits = ['apple', 'pear', 'banana', 'cherry', 'tomato'];
+$count = count($areTheseFruits);
+//from here on you can change the code
+for($i=0; $i < $count; $i++) {
+    if(!in_array($areTheseFruits[$i], $validFruits)) { // in_array: Checks if a value exists in an array
+        unset($areTheseFruits[$i]); // unset means 'remove from the array'
+    }
+}
+
+var_dump($areTheseFruits); //do not change this. 
+//var_dump — displays structured information about one or more expressions that includes its type and value.
